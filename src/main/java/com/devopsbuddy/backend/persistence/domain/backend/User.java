@@ -170,24 +170,6 @@ public class User implements Serializable {
         this.plan = plan;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", email='" + email + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", description='" + description + '\'' +
-                ", country='" + country + '\'' +
-                ", profileImageUrl='" + profileImageUrl + '\'' +
-                ", stripeCustomerId='" + stripeCustomerId + '\'' +
-                ", enabled=" + enabled +
-                ", plan=" + plan +
-                '}';
-    }
 
     @Override
     public boolean equals(Object o) {

@@ -38,10 +38,18 @@ public class Plan implements Serializable{
     }
 
     @Override
-    public String toString() {
-        return "Plan{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Plan plan = (Plan) o;
+
+        return id == plan.id;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return id;
     }
 }
