@@ -13,7 +13,9 @@ import com.devopsbuddy.enums.RolesEnum;
 import com.devopsbuddy.utils.UserUtils;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestName;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
@@ -38,7 +40,7 @@ public class RepositoriesIntegration {
     @Autowired
     private UserRepository userRepository;
 
-    public static final int BASIC_PLAN_ID = 1;
+    @Rule public TestName testName = new TestName();
 
     @Before
     public void init() {
@@ -60,7 +62,10 @@ public class RepositoriesIntegration {
     @Test
     public void createNewUser() throws Exception {
 
-        User basicUser = createUser();
+        String username = testName.getMethodName();
+        String email = testName.getMethodName() + "@devopsbuddy.com";
+
+        User basicUser = createUser(username, email);
 
         basicUser = userRepository.save(basicUser);
         User newUser = userRepository.findOne(basicUser.getId());
@@ -78,7 +83,10 @@ public class RepositoriesIntegration {
     @Test
     public void testDeleteUser(){
 
-        User basicUser = createUser();
+        String username = testName.getMethodName();
+        String email = testName.getMethodName() + "@devopsbuddy.com";
+
+        User basicUser = createUser(username, email);
         userRepository.delete(basicUser.getId());
     }
 
@@ -86,7 +94,7 @@ public class RepositoriesIntegration {
     public void testCreateNewPlan() throws Exception {
         Plan basicPlan = createBasicPlan(PlansEnum.BASIC);
         planRepository.save(basicPlan);
-        Plan retievePlan = planRepository.findOne(BASIC_PLAN_ID);
+        Plan retievePlan = planRepository.findOne(PlansEnum.BASIC.getId());
         Assert.assertNotNull(retievePlan);
     }
 
@@ -98,11 +106,11 @@ public class RepositoriesIntegration {
         return new Role(rolesEnum);
     }
 
-    private User createUser() {
+    private User createUser(String username, String email) {
         Plan basicPlan = createBasicPlan(PlansEnum.BASIC);
         planRepository.save(basicPlan);
 
-        User basicUser = UserUtils.createBasicUser();
+        User basicUser = UserUtils.createBasicUser(username, email);
         basicUser.setPlan(basicPlan);
 
         Role basicRole = createRole(RolesEnum.BASIC);
