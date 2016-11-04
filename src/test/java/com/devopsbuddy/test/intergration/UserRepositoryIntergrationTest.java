@@ -19,13 +19,14 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * Created by Jonathan on 11/3/2016.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = DevopsbuddyApplication.class)
-public class UserIntergrationTest extends AbstractIntergrationTest {
+public class UserRepositoryIntergrationTest extends AbstractIntergrationTest {
 
 
     @Rule public TestName testName = new TestName();
@@ -84,6 +85,30 @@ public class UserIntergrationTest extends AbstractIntergrationTest {
         planRepository.save(basicPlan);
         Plan retievePlan = planRepository.findOne(PlansEnum.BASIC.getId());
         Assert.assertNotNull(retievePlan);
+    }
+
+    @Test
+    public void testGetUserByEmail() throws Exception {
+        User user = createUser(testName);
+
+        User newlyFoundUser = userRepository.findByEmail(user.getEmail());
+        Assert.assertNotNull(newlyFoundUser);
+        Assert.assertNotNull(newlyFoundUser.getId());
+    }
+
+    @Test
+    public void testUpdateUserPassword() throws Exception {
+        User user = createUser(testName);
+        Assert.assertNotNull(user);
+        Assert.assertNotNull(user.getId());
+
+        String newPassword = UUID.randomUUID().toString();
+
+        userRepository.updateUserPassword(user.getId(), newPassword);
+
+        user = userRepository.findOne(user.getId());
+        Assert.assertEquals(newPassword, user.getPassword());
+
     }
 
 
